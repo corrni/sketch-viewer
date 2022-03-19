@@ -1,3 +1,11 @@
+import { ApolloProvider } from '@apollo/client';
+
+import { apolloClient } from 'config';
+
 export function App() {
-  return <div>Sketch viewer</div>;
+  return (
+    <ApolloProvider client={apolloClient}>
+      <div>Sketch document viewer</div>
+    </ApolloProvider>
+  );
 }
