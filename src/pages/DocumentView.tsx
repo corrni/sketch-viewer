@@ -1,44 +1,14 @@
 /** @jsxImportSource @emotion/react */
+import React from 'react';
 import { css } from '@emotion/react';
+import { Link, useParams } from 'react-router-dom';
+
 import { useDocumentContext } from 'context';
 import { Icon } from 'components';
-import { Link } from 'react-router-dom';
+
+import { PageLayout } from './layout';
 
 const styles = {
-  wrapper: css`
-    height: 100vh;
-    width: 100vw;
-    align-items: center;
-  `,
-  header: css`
-    display: flex;
-    background-color: var(--white);
-    height: 64px;
-    width: 100%;
-    border-bottom: 1px solid rgb(230, 230, 230);
-  `,
-  headerNav: css`
-    display: flex;
-    align-items: center;
-    margin-left: 1rem;
-
-    & > * + * {
-      margin-left: 0.5rem;
-    }
-
-    & > * + svg {
-      height: 3rem;
-    }
-  `,
-  content: css`
-    background-color: var(--gray-97);
-    height: calc(100% - 64px);
-    width: 100%;
-    overflow-y: auto;
-  `,
-};
-
-const artboardStyles = {
   wrapper: css`
     margin: 1rem;
     display: grid;
@@ -49,7 +19,7 @@ const artboardStyles = {
     color: gray;
     font-weight: 500;
 
-    & a {
+    a {
       color: inherit;
       text-decoration: none;
     }
@@ -71,33 +41,34 @@ const artboardStyles = {
   `,
 };
 
+const NavSection: React.FC<{ title: string }> = ({ title }) => (
+  <React.Fragment>
+    <Icon.SketchLogo />
+    <Icon.Separator />
+    <span>{title}</span>
+  </React.Fragment>
+);
+
 export const DocumentView = () => {
+  const params = useParams();
   const { share } = useDocumentContext();
 
   if (share == null) return <div>Loading...</div>;
 
   const documentTitle = share.version.document.name;
-
   const artboardEntries = share.version.document.artboards.entries;
 
   return (
-    <div css={styles.wrapper}>
-      <header css={styles.header}>
-        <div css={styles.headerNav}>
-          <Icon.SketchLogo />
-          <Icon.Separator />
-          <span>{documentTitle}</span>
-        </div>
-      </header>
-      <section css={styles.content}>
-        <div css={artboardStyles.wrapper}>
+    <PageLayout.Container>
+      <PageLayout.Header leftNav={<NavSection title={documentTitle} />} />
+      <PageLayout.Content>
+        <div css={styles.wrapper}>
           {artboardEntries.map((board) => {
-            const { name, files } = board;
-
+            const { name, files, shortId } = board;
             const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
 
             return (
-              <Link css={artboardStyles.artboardBox} to="#">
+              <Link key={shortId} css={styles.artboardBox} to={`/share/${params.shareId}/artboard/${shortId}`}>
                 <img
                   alt={name}
                   src={smallThumbnail.url}
@@ -108,7 +79,7 @@ export const DocumentView = () => {
             );
           })}
         </div>
-      </section>
-    </div>
+      </PageLayout.Content>
+    </PageLayout.Container>
   );
 };
