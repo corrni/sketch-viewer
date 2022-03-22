@@ -1,12 +1,9 @@
 import { useQuery } from '@apollo/client';
 import React, { useMemo, useState } from 'react';
 import { useContext } from 'react';
-import {
-  DocumentShare,
-  DocumentSharePayload,
-  DocumentShareVariables,
-  GET_SHARED_DOCUMENT,
-} from './getSharedDocument.graphql';
+
+import { GET_SHARED_DOCUMENT } from './getSharedDocument.graphql';
+import { DocumentShare, DocumentSharePayload, DocumentShareVariables } from './types';
 
 interface ContextValue {
   share: DocumentShare | null;
