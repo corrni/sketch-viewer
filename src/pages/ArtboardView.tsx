@@ -3,73 +3,54 @@ import { css } from '@emotion/react';
 import { useDocumentContext } from 'context';
 import { Icon } from 'components';
 import { Link, useParams } from 'react-router-dom';
+import { PageLayout } from './layout';
+import React from 'react';
 
-const styles = {
-  wrapper: css`
-    height: 100vh;
-    width: 100vw;
-    align-items: center;
-  `,
-  header: css`
-    display: flex;
-    background-color: var(--white);
-    height: 64px;
-    width: 100%;
-    border-bottom: 1px solid rgb(230, 230, 230);
-  `,
-  headerNav: css`
-    display: flex;
-    align-items: center;
-    margin-left: 1rem;
+const artboardImage = css`
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
 
-    & > * + * {
-      margin-left: 0.5rem;
-    }
+  & > img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+  }
+`;
 
-    & > * + svg {
-      height: 3rem;
-    }
-  `,
-  content: css`
-    background-color: var(--gray-97);
-    height: calc(100% - 64px);
-    width: 100%;
-    overflow-y: auto;
-  `,
-};
+const navigationStyles = css`
+  display: flex;
+  align-items: center;
 
-const artboardStyles = {
-  wrapper: css`
-    margin: 1rem;
-    display: grid;
-    grid-gap: 1rem;
-    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  & > span {
+    color: #808080;
+    font-size: 0.85rem;
+    width: 3rem;
+    margin: 0 0.2rem;
+    text-align: center;
+  }
+`;
 
-    font-size: 0.9rem;
-    color: gray;
-    font-weight: 500;
+const PreviousLink: React.FC<{ to: string; disabled: boolean }> = ({ to, disabled }) =>
+  disabled ? (
+    <Icon.ArrowLeft />
+  ) : (
+    <Link to={to}>
+      <Icon.ArrowLeft />
+    </Link>
+  );
 
-    & a {
-      color: inherit;
-      text-decoration: none;
-    }
-  `,
-  artboardBox: css`
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content: space-between;
-    margin: 1.5rem 0.75rem;
-
-    & > * + * {
-      margin-top: 1rem;
-    }
-
-    & > img {
-      width: 250px;
-    }
-  `,
-};
+const NextLink: React.FC<{ to: string; disabled: boolean }> = ({ to, disabled }) =>
+  disabled ? (
+    <Icon.ArrowRight />
+  ) : (
+    <Link to={to}>
+      <Icon.ArrowRight />
+    </Link>
+  );
 
 export const ArtboardView = () => {
   const params = useParams();
@@ -77,18 +58,54 @@ export const ArtboardView = () => {
 
   if (share == null) return <div>Loading...</div>;
 
+  const entries = share.version.document.artboards.entries;
+  const artboard = entries.find((artboard) => artboard.shortId === params.artboardId);
+
+  const artboardIndex = (currentId: string) => entries.findIndex((artboard) => artboard.shortId === currentId);
+
+  const previousArtboardId = (currentId: string) => {
+    const artboardIdx = entries.findIndex((artboard) => artboard.shortId === currentId);
+    const hasPrevious = artboardIdx > 0;
+    return hasPrevious ? entries[artboardIdx - 1]?.shortId : null;
+  };
+
+  const nextArtboardId = (currentId: string) => {
+    const artboardIdx = entries.findIndex((artboard) => artboard.shortId === currentId);
+    const hasNext = artboardIdx !== -1 && artboardIdx < entries.length - 1;
+    return hasNext ? entries[artboardIdx + 1].shortId : null;
+  };
+
   return (
-    <div css={styles.wrapper}>
-      <header css={styles.header}>
-        <div css={styles.headerNav}>
-          <Link to={`/share/${params.shareId}`}>
-            <Icon.Close />
-          </Link>
-          <Icon.Separator />
-          <span>[Navigation]</span>
+    <PageLayout.Container>
+      <PageLayout.Header
+        leftNav={
+          <React.Fragment>
+            <Link to={`/share/${params.shareId}`}>
+              <Icon.Close />
+            </Link>
+            <Icon.Separator />
+            <div css={navigationStyles}>
+              <PreviousLink
+                disabled={previousArtboardId(params?.artboardId!) === null}
+                to={`/share/${params?.shareId}/artboard/${previousArtboardId(params?.artboardId!)}`}
+              />
+              <span>
+                {artboardIndex(params?.artboardId!) + 1} / {entries.length}
+              </span>
+              <NextLink
+                disabled={nextArtboardId(params?.artboardId!) === null}
+                to={`/share/${params?.shareId}/artboard/${nextArtboardId(params?.artboardId!)}`}
+              />
+            </div>
+          </React.Fragment>
+        }
+        title={artboard?.name}
+      />
+      <PageLayout.Content>
+        <div css={artboardImage}>
+          <img src={artboard?.files[1].url} alt={artboard?.name} />
         </div>
-      </header>
-      <section css={styles.content}>hello</section>
-    </div>
+      </PageLayout.Content>
+    </PageLayout.Container>
   );
 };

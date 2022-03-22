@@ -9,6 +9,7 @@ const styles = {
   `,
   header: css`
     display: flex;
+    align-items: center;
     background-color: var(--white);
     height: 64px;
     width: 100%;
@@ -27,6 +28,16 @@ const styles = {
       height: 3rem;
     }
   `,
+  headerTitle: css`
+    display: flex;
+    width: 100%;
+    justify-content: center;
+
+    h1 {
+      /* TODO: offset nav width */
+      font-weight: 600;
+    }
+  `,
   content: css`
     background-color: var(--gray-97);
     height: calc(100% - 64px);
@@ -42,10 +53,15 @@ interface HeaderProps {
   title?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ leftNav }) => {
+export const Header: React.FC<HeaderProps> = ({ leftNav, title }) => {
   return (
     <header css={styles.header}>
       <nav css={styles.headerNav}>{leftNav}</nav>
+      {title && (
+        <div css={styles.headerTitle}>
+          <h1>{title}</h1>
+        </div>
+      )}
     </header>
   );
 };
