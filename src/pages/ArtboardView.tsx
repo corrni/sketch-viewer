@@ -26,7 +26,7 @@ const navigationStyles = css`
   align-items: center;
 
   & > span {
-    color: #808080;
+    color: var(--gray);
     font-size: 0.85rem;
     width: 3rem;
     margin: 0 0.2rem;
@@ -78,26 +78,25 @@ export const ArtboardView = () => {
   return (
     <PageLayout.Container>
       <PageLayout.Header
-        leftNav={
-          <React.Fragment>
-            <Link to={`/share/${params.shareId}`}>
-              <Icon.Close />
-            </Link>
-            <Icon.Separator />
-            <div css={navigationStyles}>
-              <PreviousLink
-                disabled={previousArtboardId(params?.artboardId!) === null}
-                to={`/share/${params?.shareId}/artboard/${previousArtboardId(params?.artboardId!)}`}
-              />
-              <span>
-                {artboardIndex(params?.artboardId!) + 1} / {entries.length}
-              </span>
-              <NextLink
-                disabled={nextArtboardId(params?.artboardId!) === null}
-                to={`/share/${params?.shareId}/artboard/${nextArtboardId(params?.artboardId!)}`}
-              />
-            </div>
-          </React.Fragment>
+        navIcon={
+          <Link to={`/share/${params.shareId}`}>
+            <Icon.Close />
+          </Link>
+        }
+        navSection={
+          <div css={navigationStyles}>
+            <PreviousLink
+              disabled={previousArtboardId(params?.artboardId!) === null}
+              to={`/share/${params?.shareId}/artboard/${previousArtboardId(params?.artboardId!)}`}
+            />
+            <span>
+              {artboardIndex(params?.artboardId!) + 1} / {entries.length}
+            </span>
+            <NextLink
+              disabled={nextArtboardId(params?.artboardId!) === null}
+              to={`/share/${params?.shareId}/artboard/${nextArtboardId(params?.artboardId!)}`}
+            />
+          </div>
         }
         title={artboard?.name}
       />

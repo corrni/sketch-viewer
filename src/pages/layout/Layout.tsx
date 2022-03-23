@@ -1,62 +1,62 @@
 /** @jsxImportSource @emotion/react */
 import { css } from '@emotion/react';
-
-const styles = {
-  wrapper: css`
-    height: 100vh;
-    width: 100vw;
-    align-items: center;
-  `,
-  header: css`
-    display: flex;
-    align-items: center;
-    background-color: var(--white);
-    height: 64px;
-    width: 100%;
-    border-bottom: 1px solid rgb(230, 230, 230);
-  `,
-  headerNav: css`
-    display: flex;
-    align-items: center;
-    margin-left: 1rem;
-
-    & > * + * {
-      margin-left: 0.5rem;
-    }
-
-    & > * + svg {
-      height: 3rem;
-    }
-  `,
-  headerTitle: css`
-    display: flex;
-    width: 100%;
-    justify-content: center;
-
-    h1 {
-      /* TODO: offset nav width */
-      font-weight: 600;
-    }
-  `,
-  content: css`
-    background-color: var(--gray-97);
-    height: calc(100% - 64px);
-    width: 100%;
-    overflow-y: auto;
-  `,
-};
-
-export const Container: React.FC = ({ children }) => <div css={styles.wrapper}>{children}</div>;
+import { Icon } from 'components';
 
 interface HeaderProps {
-  leftNav: React.ReactNode;
+  navIcon: React.ReactNode;
+  navSection: React.ReactNode;
   title?: string;
 }
 
-export const Header: React.FC<HeaderProps> = ({ leftNav, title }) => {
+export const Header: React.FC<HeaderProps> = ({ navIcon, navSection, title }) => {
+  const styles = {
+    wrapper: css`
+      display: flex;
+      position: relative;
+      align-items: center;
+      justify-content: flex-start;
+      height: var(--header-wrapper-height);
+      width: 100%;
+      background-color: var(--header-background-color);
+      border-bottom: var(--header-border-bottom);
+    `,
+    navSection: css`
+      display: flex;
+      align-items: center;
+      margin-left: var(--header-nav-left-margin);
+      gap: var(--header-nav-gap);
+
+      & > * + svg {
+        height: var(--header-nav-separator-height);
+      }
+    `,
+    navIcon: css`
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: var(--header-nav-icon-height);
+      width: var(--header-nav-icon-width);
+    `,
+    headerTitle: css`
+      display: flex;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+
+      h1 {
+        font-weight: var(--header-title-font-weight);
+      }
+    `,
+  };
+
   return (
-    <header css={styles.header}>
-      <nav css={styles.headerNav}>{leftNav}</nav>
+    <header css={styles.wrapper}>
+      <nav css={styles.navSection}>
+        <div css={styles.navIcon}>{navIcon}</div>
+        <Icon.Separator />
+        {navSection}
+      </nav>
       {title && (
         <div css={styles.headerTitle}>
           <h1>{title}</h1>
@@ -66,6 +66,27 @@ export const Header: React.FC<HeaderProps> = ({ leftNav, title }) => {
   );
 };
 
-export const Content: React.FC = ({ children }) => {
-  return <section css={styles.content}>{children}</section>;
-};
+export const Container: React.FC = ({ children }) => (
+  <div
+    css={css`
+      height: 100vh;
+      width: 100vw;
+      align-items: center;
+    `}
+  >
+    {children}
+  </div>
+);
+
+export const Content: React.FC = ({ children }) => (
+  <section
+    css={css`
+      background-color: var(--main-content-background-color);
+      height: calc(100% - var(--header-wrapper-height));
+      width: 100%;
+      overflow-y: auto;
+    `}
+  >
+    {children}
+  </section>
+);

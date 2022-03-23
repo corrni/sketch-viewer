@@ -13,17 +13,35 @@ const reset = css`
   }
 `;
 
-const colors = css`
+const styles = css`
   :root {
-    --white: #fff;
+    /* Colors */
+    --gray: #808080;
     --gray-97: #f7f7f7;
-  }
-`;
+    --platinum: #e6e6e6;
+    --white: #fff;
 
-const typography = css`
-  :root {
+    /* Typography */
     --body-font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
     --body-font-size: 16px;
+
+    /* Header */
+    --header-wrapper-height: 64px;
+    --header-border-bottom: 1px solid var(--platinum);
+    --header-background-color: var(--white);
+
+    /* Header > Nav section */
+    --header-nav-left-margin: 1rem;
+    --header-nav-gap: 0.5rem;
+    --header-nav-icon-height: 25px;
+    --header-nav-icon-width: 25px;
+    --header-nav-separator-height: 3rem;
+
+    /* Header > Title */
+    --header-title-font-weight: 600;
+
+    /* Page content */
+    --main-content-background-color: var(--gray-97);
   }
 
   body {
@@ -34,8 +52,7 @@ const typography = css`
 
 export const GlobalStyles: React.FC = ({ children }) => (
   <React.Fragment>
-    <Global styles={reset} />
-    <Global styles={[colors, typography]} />
+    <Global styles={[reset, styles]} />
     {children}
   </React.Fragment>
 );

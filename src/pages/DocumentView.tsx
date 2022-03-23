@@ -1,5 +1,5 @@
 /** @jsxImportSource @emotion/react */
-import React from 'react';
+import { useMemo } from 'react';
 import { css } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
 
@@ -24,51 +24,35 @@ const styles = {
       text-decoration: none;
     }
   `,
-  artboardBox: css`
+  artBoard: css`
     display: flex;
     flex-direction: column;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-end;
     margin: 1.5rem 0.75rem;
-
-    & > * + * {
-      margin-top: 1rem;
-    }
+    gap: 1rem;
 
     & > img {
       width: 250px;
+      margin: auto;
     }
   `,
 };
 
-const NavSection: React.FC<{ title: string }> = ({ title }) => (
-  <React.Fragment>
-    <Icon.SketchLogo />
-    <Icon.Separator />
-    <span>{title}</span>
-  </React.Fragment>
-);
-
 export const DocumentView = () => {
   const params = useParams();
-  const { share } = useDocumentContext();
+  const document = useSketchDocument();
 
-  if (share == null) return <div>Loading...</div>;
-
-  const documentTitle = share.version.document.name;
-  const artboardEntries = share.version.document.artboards.entries;
+  if (document == null) return <div>Loading...</div>;
 
   return (
     <PageLayout.Container>
-      <PageLayout.Header leftNav={<NavSection title={documentTitle} />} />
+      <PageLayout.Header navIcon={<Icon.SketchLogo />} navSection={<span>{document.title}</span>} />
       <PageLayout.Content>
         <div css={styles.wrapper}>
-          {artboardEntries.map((board) => {
-            const { name, files, shortId } = board;
-            const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
-
+          {document.artboards.map(({ name, shortId, smallThumbnail, largeThumbnail }) => {
             return (
-              <Link key={shortId} css={styles.artboardBox} to={`/share/${params.shareId}/artboard/${shortId}`}>
+              <Link key={shortId} css={styles.artBoard} to={`/share/${params.shareId}/artboard/${shortId}`}>
                 <img
                   alt={name}
                   src={smallThumbnail.url}
@@ -83,3 +67,26 @@ export const DocumentView = () => {
     </PageLayout.Container>
   );
 };
+
+function useSketchDocument() {
+  const { share } = useDocumentContext();
+
+  return useMemo(() => {
+    if (share == null) return null;
+    const artboardEntries = share.version.document.artboards.entries;
+
+    return {
+      title: share.version.document.name,
+      artboards: artboardEntries.map(({ files, name, shortId }) => {
+        const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
+
+        return {
+          largeThumbnail,
+          smallThumbnail,
+          name,
+          shortId,
+        };
+      }),
+    };
+  }, [share]);
+}
