@@ -16,7 +16,7 @@ interface ArtboardFile {
   __typename: 'File';
 }
 
-interface Artboard {
+export interface Artboard {
   name: string;
   shortId: string;
   isArtboard: boolean;

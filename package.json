@@ -46,5 +46,13 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@testing-library/react-hooks": "^7.0.2"
+  },
+  "jest": {
+    "testMatch": [
+      "<rootDir>/src/**/*.test.{ts,tsx}"
+    ]
   }
 }

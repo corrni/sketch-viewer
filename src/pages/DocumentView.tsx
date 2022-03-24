@@ -1,12 +1,12 @@
 /** @jsxImportSource @emotion/react */
-import { useMemo } from 'react';
 import { css } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
 
-import { useDocumentContext } from 'context';
 import { Icon } from 'components';
+import { Artboard, useDocument } from 'hooks';
 
 import { PageLayout } from './layout';
+import { useMemo } from 'react';
 
 const styles = {
   wrapper: css`
@@ -39,18 +39,32 @@ const styles = {
   `,
 };
 
-export const DocumentView = () => {
-  const params = useParams();
-  const document = useSketchDocument();
+const formatArtboardEntries = (artboards: Artboard[]) =>
+  artboards.map(({ files, name, shortId }) => {
+    const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
 
-  if (document == null) return <div>Loading...</div>;
+    return {
+      largeThumbnail,
+      smallThumbnail,
+      name,
+      shortId,
+    };
+  });
+
+export const DocumentView = () => {
+  const params = useParams<{ shareId: string }>();
+  const sharedDocument = useDocument(params.shareId);
+  const artboardEntries = useMemo(() => formatArtboardEntries(sharedDocument.artboards), [sharedDocument.artboards]);
+
+  if (sharedDocument.loading) return <div>Loading...</div>;
+  if (sharedDocument.notFound) return <div>Not found</div>;
 
   return (
     <PageLayout.Container>
-      <PageLayout.Header navIcon={<Icon.SketchLogo />} navSection={<span>{document.title}</span>} />
+      <PageLayout.Header navIcon={<Icon.SketchLogo />} navSection={<span>{sharedDocument.name}</span>} />
       <PageLayout.Content>
         <div css={styles.wrapper}>
-          {document.artboards.map(({ name, shortId, smallThumbnail, largeThumbnail }) => {
+          {artboardEntries.map(({ name, shortId, smallThumbnail, largeThumbnail }) => {
             return (
               <Link key={shortId} css={styles.artBoard} to={`/share/${params.shareId}/artboard/${shortId}`}>
                 <img
@@ -67,26 +81,3 @@ export const DocumentView = () => {
     </PageLayout.Container>
   );
 };
-
-function useSketchDocument() {
-  const { share } = useDocumentContext();
-
-  return useMemo(() => {
-    if (share == null) return null;
-    const artboardEntries = share.version.document.artboards.entries;
-
-    return {
-      title: share.version.document.name,
-      artboards: artboardEntries.map(({ files, name, shortId }) => {
-        const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
-
-        return {
-          largeThumbnail,
-          smallThumbnail,
-          name,
-          shortId,
-        };
-      }),
-    };
-  }, [share]);
-}
