@@ -32,7 +32,7 @@ const styles = css`
 
     /* Header > Nav section */
     --header-nav-left-margin: 1rem;
-    --header-nav-gap: 0.5rem;
+    --header-nav-gap: 1rem;
     --header-nav-icon-height: 25px;
     --header-nav-icon-width: 25px;
     --header-nav-separator-height: 3rem;
@@ -40,8 +40,16 @@ const styles = css`
     /* Header > Title */
     --header-title-font-weight: 600;
 
-    /* Page content */
+    /* Content */
     --main-content-background-color: var(--gray-97);
+
+    /* Document viewer > Artboard thumbnails */
+    --artboard-thumbnail-margin: 1.5rem 0.75rem;
+    --artboard-thumbnail-gap: 1rem;
+    --artboard-thumbnail-font-size: 0.9rem;
+    --artboard-thumbnail-color: var(--gray);
+    --artboard-thumbnail-font-weight: 500;
+    --artboard-thumbnail-width: 250px;
   }
 
   body {

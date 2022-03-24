@@ -26,7 +26,7 @@ export const Header: React.FC<HeaderProps> = ({ navIcon, navSection, title }) =>
       margin-left: var(--header-nav-left-margin);
       gap: var(--header-nav-gap);
 
-      & > * + svg {
+      .icon.separator {
         height: var(--header-nav-separator-height);
       }
     `,
@@ -66,27 +66,23 @@ export const Header: React.FC<HeaderProps> = ({ navIcon, navSection, title }) =>
   );
 };
 
-export const Container: React.FC = ({ children }) => (
-  <div
-    css={css`
-      height: 100vh;
-      width: 100vw;
-      align-items: center;
-    `}
-  >
-    {children}
-  </div>
-);
+export const Container: React.FC = ({ children }) => {
+  const styles = css`
+    height: 100vh;
+    width: 100vw;
+    align-items: center;
+  `;
 
-export const Content: React.FC = ({ children }) => (
-  <section
-    css={css`
-      background-color: var(--main-content-background-color);
-      height: calc(100% - var(--header-wrapper-height));
-      width: 100%;
-      overflow-y: auto;
-    `}
-  >
-    {children}
-  </section>
-);
+  return <div css={styles}>{children}</div>;
+};
+
+export const Content: React.FC = ({ children }) => {
+  const styles = css`
+    background-color: var(--main-content-background-color);
+    height: calc(100% - var(--header-wrapper-height));
+    width: 100%;
+    overflow-y: auto;
+  `;
+
+  return <section css={styles}>{children}</section>;
+};

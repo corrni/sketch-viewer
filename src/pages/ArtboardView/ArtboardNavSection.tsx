@@ -6,15 +6,27 @@ import { Icon } from 'components';
 import { useArtboard } from 'hooks';
 
 const styles = css`
+  --nav-section-margin: 0 0.2rem;
+  --nav-section-width: 3rem;
+  --nav-section-color: var(--gray);
+  --nav-section-link--disabled: 0.5;
+  --nav-section-font-size: 0.85rem;
+
   display: flex;
   align-items: center;
 
-  & > span {
-    color: var(--gray);
-    font-size: 0.85rem;
-    width: 3rem;
-    margin: 0 0.2rem;
+  .artboardPosition {
+    color: var(--nav-section-color);
+    font-size: var(--nav-section-font-size);
+    width: var(--nav-section-width);
+    margin: var(--nav-section-margin);
     text-align: center;
+  }
+
+  /* Nav icon disabled state */
+  & > .icon.arrow-left,
+  & > .icon.arrow-right {
+    opacity: var(--nav-section-link--disabled);
   }
 `;
 
@@ -25,6 +37,8 @@ export const ArtboardNavSection = () => {
     shareId: params.shareId,
   });
 
+  const artboardPosition = `${artboardIndex + 1} / ${artboardCount}`;
+
   return (
     <div css={styles}>
       {previousArtboard === null ? (
@@ -34,9 +48,7 @@ export const ArtboardNavSection = () => {
           <Icon.ArrowLeft />
         </Link>
       )}
-      <span>
-        {artboardIndex + 1} / {artboardCount}
-      </span>
+      <span className="artboardPosition">{artboardPosition}</span>
       {nextArtboard === null ? (
         <Icon.ArrowRight />
       ) : (
