@@ -7,6 +7,7 @@ import { Artboard, useDocument } from 'hooks';
 
 import { PageLayout } from '../layout';
 import { ArtboardThumbnail } from './ArtboardThumbnail';
+import { EmptyPage, FullscreenLoader } from 'pages/EmptyMessage';
 
 const styles = css`
   display: grid;
@@ -20,9 +21,8 @@ export const DocumentView = () => {
   const sharedDocument = useDocument(params.shareId);
   const artboardEntries = formatArtboardEntries(sharedDocument.artboards);
 
-  if (sharedDocument.loading) return <div>Loading...</div>;
-
-  if (sharedDocument.notFound) return <div>Not found</div>;
+  if (sharedDocument.loading) return <FullscreenLoader />;
+  if (sharedDocument.notFound) return <EmptyPage text="The document was not found!" />;
 
   return (
     <PageLayout.Container>

@@ -7,6 +7,7 @@ import { useArtboard } from 'hooks';
 
 import { PageLayout } from '../layout';
 import { ArtboardNavSection } from './ArtboardNavSection';
+import { EmptyPage, FullscreenLoader } from 'pages/EmptyMessage';
 
 const artboardImage = css`
   display: flex;
@@ -30,8 +31,8 @@ export const ArtboardView = () => {
     shareId: params.shareId,
   });
 
-  if (loading) return <div>Loading...</div>;
-  if (notFound) return <div>No artboard found</div>;
+  if (loading) return <FullscreenLoader />;
+  if (notFound) return <EmptyPage text="The artboard was not found!" />;
 
   return (
     <PageLayout.Container>

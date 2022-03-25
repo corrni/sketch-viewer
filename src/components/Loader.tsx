@@ -11,7 +11,7 @@ const styles = css`
     border-radius: 50%;
     width: var(--loader-wrapper-size);
     height: var(--loader-wrapper-size);
-    animation: spin 3s linear infinite;
+    animation: spin 2s linear infinite;
   }
 
   @keyframes spin {

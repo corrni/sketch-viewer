@@ -3,8 +3,8 @@ import { css } from '@emotion/react';
 import { Icon } from 'components';
 
 interface HeaderProps {
-  navIcon: React.ReactNode;
-  navSection: React.ReactNode;
+  navIcon?: React.ReactNode;
+  navSection?: React.ReactNode;
   title?: string;
 }
 
