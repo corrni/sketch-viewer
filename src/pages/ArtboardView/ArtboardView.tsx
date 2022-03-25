@@ -1,28 +1,18 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import { Link, useParams } from 'react-router-dom';
 
 import { Icon } from 'components';
 import { useArtboard } from 'hooks';
 
 import { PageLayout } from '../layout';
+import { EmptyPage, FullscreenLoader } from '../EmptyMessage';
 import { ArtboardNavSection } from './ArtboardNavSection';
-import { EmptyPage, FullscreenLoader } from 'pages/EmptyMessage';
+import { ArtboardImage } from './ArtboardImage';
 
-const artboardImage = css`
-  display: flex;
-  height: 100%;
-  width: 100%;
-  justify-content: center;
-  align-items: center;
-  padding: 1rem;
-
-  & > img {
-    max-height: 100%;
-    max-width: 100%;
-    object-fit: contain;
-  }
-`;
+const CloseArtboard: React.FC<{ shareId: string }> = ({ shareId }) => (
+  <Link to={`/share/${shareId}`}>
+    <Icon.Close />
+  </Link>
+);
 
 export const ArtboardView = () => {
   const params = useParams<{ artboardId: string; shareId: string }>();
@@ -32,23 +22,17 @@ export const ArtboardView = () => {
   });
 
   if (loading) return <FullscreenLoader />;
-  if (notFound) return <EmptyPage text="The artboard was not found!" />;
+  if (notFound || artboard == null) return <EmptyPage text="The artboard was not found!" />;
 
   return (
     <PageLayout.Container>
       <PageLayout.Header
-        navIcon={
-          <Link to={`/share/${params.shareId}`}>
-            <Icon.Close />
-          </Link>
-        }
+        navIcon={<CloseArtboard shareId={params.shareId!} />}
         navSection={<ArtboardNavSection />}
-        title={artboard?.name}
+        title={artboard.name}
       />
       <PageLayout.Content>
-        <div css={artboardImage}>
-          <img src={artboard?.files[1].url} alt={artboard?.name} />
-        </div>
+        <ArtboardImage artboard={artboard} />
       </PageLayout.Content>
     </PageLayout.Container>
   );
