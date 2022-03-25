@@ -56,7 +56,7 @@ Overall, I'm fairly happy with what I came up with, but there's a few things I c
 
 - Umm... what is the `Artboard.isArtboard` flag used for? It was true in all entries, and seemed superfluous to me.
 - Apollo has tooling to auto-generate types from a GraphQL schema. I got a few errors when I tried to use it with the Sketch API (see screenshot),
-  but I want to try and get it to work of these days --static typing is one thing, but having the API itself inform the type-checker is really cool!
+  but I want to try and get it to work one of these days --static typing is one thing, but having the API itself inform the type-checker is really cool!
 
 Apollo codegen error ("spurious results")
 ![](./apollo-codegen-error.png)
