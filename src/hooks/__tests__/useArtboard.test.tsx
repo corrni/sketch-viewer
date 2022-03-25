@@ -87,6 +87,7 @@ describe('useArtboard', () => {
 
         await waitFor(() => {
           expect(result.current.previousArtboard).toMatchObject({
+            name: 'Xerox alto',
             shortId: 'qQQ1Z72',
           });
         });
