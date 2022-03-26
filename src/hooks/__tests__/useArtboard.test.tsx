@@ -19,7 +19,7 @@ describe('useArtboard', () => {
         artboardIndex: -1,
         loading: false,
         nextArtboard: null,
-        notFound: false,
+        notFound: true,
         previousArtboard: null,
       };
 

@@ -22,7 +22,7 @@ export const ArtboardView = () => {
   });
 
   if (loading) return <FullscreenLoader />;
-  if (notFound || artboard == null) return <EmptyPage text="The artboard was not found!" />;
+  if (notFound) return <EmptyPage text="The artboard was not found!" />;
 
   return (
     <PageLayout.Container>

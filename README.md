@@ -7,7 +7,7 @@ This is a simple viewer for Sketch documents stored in the cloud.
 To get started:
 
 1. First, run `yarn install` on your terminal to fetch all dependencies
-2. In the applicatons's root directory, create a file for environment variables by running `cp .env.sample .env`
+2. In the applications's root directory, create a file for environment variables by running `cp .env.sample .env`
 3. Open the .env file, and make sure the `REACT_APP_GRAPHQL_ENDPOINT` environment variable points to the Sketch GraphQL API endpoint
    (usually https://graphql.sketch.cloud/api)
 4. Run `yarn start` to start the application
