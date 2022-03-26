@@ -2,22 +2,22 @@
 import { css } from '@emotion/react';
 import { Artboard } from 'hooks';
 
+const artboardImage = css`
+  display: flex;
+  height: 100%;
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  padding: 1rem;
+
+  & img {
+    max-width: 100%;
+    max-height: 100%;
+  }
+`;
+
 export const ArtboardImage: React.FC<{ artboard: Artboard }> = ({ artboard }) => {
   const { srcImage, srcSet } = getImageAttributes(artboard);
-
-  const artboardImage = css`
-    display: flex;
-    height: 100%;
-    width: 100%;
-    justify-content: center;
-    align-items: center;
-    padding: 1rem;
-
-    & img {
-      max-width: 100%;
-      max-height: 100%;
-    }
-  `;
 
   return (
     <div css={artboardImage}>

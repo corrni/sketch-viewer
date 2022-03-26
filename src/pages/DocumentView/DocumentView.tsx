@@ -1,58 +1,25 @@
-/** @jsxImportSource @emotion/react */
-import { css } from '@emotion/react';
 import { useParams } from 'react-router-dom';
 
 import { Icon } from 'components';
-import { Artboard, useDocument } from 'hooks';
+import { useDocument } from 'hooks';
 
+import { EmptyPage, FullscreenLoader } from '../EmptyMessage';
 import { PageLayout } from '../layout';
-import { ArtboardThumbnail } from './ArtboardThumbnail';
-import { EmptyPage, FullscreenLoader } from 'pages/EmptyMessage';
-
-const styles = css`
-  display: grid;
-  grid-gap: 1rem;
-  grid-template-columns: repeat(auto-fit, minmax(var(--artboard-thumbnail-width), 1fr));
-  margin: 1rem;
-`;
+import { ArtboardList } from './ArtboardList';
 
 export const DocumentView = () => {
   const params = useParams<{ shareId: string }>();
-  const sharedDocument = useDocument(params.shareId);
-  const artboardEntries = formatArtboardEntries(sharedDocument.artboards);
+  const { loading, notFound, name, artboards } = useDocument(params.shareId);
 
-  if (sharedDocument.loading) return <FullscreenLoader />;
-  if (sharedDocument.notFound) return <EmptyPage text="The document was not found!" />;
+  if (loading) return <FullscreenLoader />;
+  if (notFound) return <EmptyPage text="The document was not found!" />;
 
   return (
     <PageLayout.Container>
-      <PageLayout.Header navIcon={<Icon.SketchLogo />} navSection={<span>{sharedDocument.name}</span>} />
+      <PageLayout.Header navIcon={<Icon.SketchLogo />} navSection={<span>{name}</span>} />
       <PageLayout.Content>
-        <div css={styles}>
-          {artboardEntries.map(({ name, shortId, smallThumbnail, largeThumbnail }) => (
-            <ArtboardThumbnail
-              artboardId={shortId}
-              artboardName={name}
-              smallUrl={smallThumbnail.url}
-              largeUrl={largeThumbnail.url}
-              shareId={params.shareId!}
-            />
-          ))}
-        </div>
+        <ArtboardList artboards={artboards} shareId={params.shareId!} />
       </PageLayout.Content>
     </PageLayout.Container>
   );
 };
-
-function formatArtboardEntries(artboards: Artboard[]) {
-  return artboards.map(({ files, name, shortId }) => {
-    const [largeThumbnail, smallThumbnail] = files.flatMap((f) => f.thumbnails);
-
-    return {
-      largeThumbnail,
-      smallThumbnail,
-      name,
-      shortId,
-    };
-  });
-}
