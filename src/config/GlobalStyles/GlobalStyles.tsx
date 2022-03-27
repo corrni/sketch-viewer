@@ -3,17 +3,7 @@ import React from 'react';
 import emotionReset from 'emotion-reset';
 import { Global, css } from '@emotion/react';
 
-const reset = css`
-  ${emotionReset}
-
-  *, *::after, *::before {
-    box-sizing: border-box;
-    -moz-osx-font-smoothing: grayscale;
-    -webkit-font-smoothing: antialiased;
-  }
-`;
-
-const styles = css`
+const variables = css`
   :root {
     /* Colors */
     --gray: #808080;
@@ -51,8 +41,18 @@ const styles = css`
     --artboard-thumbnail-font-weight: 500;
     --artboard-thumbnail-width: 250px;
   }
+`;
 
-  body {
+const reset = css`
+  ${emotionReset}
+
+  *, *::after, *::before {
+    box-sizing: border-box;
+    -moz-osx-font-smoothing: grayscale;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  :root {
     font-family: var(--body-font-family);
     font-size: var(--body-font-size);
   }
@@ -60,7 +60,7 @@ const styles = css`
 
 export const GlobalStyles: React.FC = ({ children }) => (
   <React.Fragment>
-    <Global styles={[reset, styles]} />
+    <Global styles={[variables, reset]} />
     {children}
   </React.Fragment>
 );

@@ -18,6 +18,7 @@ export const ArtboardList: React.VFC<{ artboards: Artboard[]; shareId: string }>
     <div css={styles}>
       {artboardEntries.map(({ name, shortId, smallThumbnail, largeThumbnail }) => (
         <ArtboardThumbnail
+          key={shortId}
           artboardId={shortId}
           artboardName={name}
           smallUrl={smallThumbnail.url}
