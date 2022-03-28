@@ -84,5 +84,5 @@ export const Content: React.FC = ({ children }) => {
     overflow-y: auto;
   `;
 
-  return <main css={styles}>{children}</main>;
+  return <section css={styles}>{children}</section>;
 };
