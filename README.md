@@ -45,7 +45,7 @@ The application is written in React and TypeScript, as well as the following:
 - Earlier on, I thought of keeping application state in a `DocumentViewer` context at the top-level. As I fleshed out the routes, though,
   I decided to simplify the data-flow and use Apollo client directly rather than spinning out an additional context of my own.
 
-### The ~~not-so-beautiful~~ ugly parts
+### The ugly parts
 
 Overall, I'm fairly happy with what I came up with, but there's a few things I could have done better:
 
